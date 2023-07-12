@@ -9,9 +9,7 @@ Infdev into Beta is a Minecraft mod for Beta 1.7.3 whichs adds Infdev 20100415 w
 *****This mod is still in development, so many bugs can happen!*****
 ## Trailer
 
-[Infdev into Beta - Trailer]
-(https://github.com/EmpereurLeon/Infdev-into-Beta/assets/111201150/b4e7b82c-663d-4b73-97ec-2d2c901f4a81)
-(https://www.youtube.com/watch?v=xMf5CzNLZbA "Infdev into Beta - Trailer")
+[![Video](https://img.youtube.com/vi/xMf5CzNLZbA/maxresdefault.jpg)](https://www.youtube.com/watch?v=xMf5CzNLZbA)
 
 ## Features
 

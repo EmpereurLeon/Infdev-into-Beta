@@ -9,4 +9,5 @@ A Minecraft mod for Beta 1.7.3 which adds Infdev 20100415 world generation.
 How to download? :
 
 -MultiMC : Click on the "Add to .jar" button and select the minecraft.zip
+
 -Manual Installation : Copy all the files from the minecraft.zip file into your b1.7.3.jar

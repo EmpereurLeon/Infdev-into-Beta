@@ -7,6 +7,7 @@ A Minecraft mod for Beta 1.7.3 which adds Infdev 20100415 world generation.
 ![2023-07-12_18 51 07](https://github.com/EmpereurLeon/Infdev-into-Beta/assets/111201150/c7610464-a1e1-4d88-bc26-816a87e432d1)
 
 How to download? :
+First, download the minecraft.zip file from the latest release.
 
 -MultiMC : Click on the "Add to .jar" button and select the minecraft.zip
 

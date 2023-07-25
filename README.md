@@ -30,3 +30,5 @@ First, download the minecraft.zip file from the latest release.
 -MultiMC : Click on the "Add to .jar" button and select the minecraft.zip
 
 -Manual Installation : Copy all the files from the minecraft.zip file into your b1.7.3.jar
+
+P.S: If you want to play in multiplayer, Copy all the files from the minecraft_server.zip into your server jar file.

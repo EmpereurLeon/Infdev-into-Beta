@@ -25,7 +25,7 @@ Infdev into Beta is a Minecraft mod for Beta 1.7.3 whichs adds Infdev 20100415 w
 
 ## How to download
 
-First, download the minecraft.zip file from the latest release.
+First, download the minecraft.zip file from the releases tab.
 
 -MultiMC : Click on the "Add to .jar" button and select the minecraft.zip
 

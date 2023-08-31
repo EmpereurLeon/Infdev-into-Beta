@@ -1,0 +1,37 @@
+--- a/net/minecraft/src/ChunkProviderSky.java
++++ b/net/minecraft/src/ChunkProviderSky.java
+@@ -102,9 +102,9 @@
+ 
+ 	public void func_28072_a(int i1, int i2, byte[] b3, BiomeGenBase[] biomeGenBase4) {
+ 		double d5 = 8.0D / 256D;
+-		this.field_28079_r = this.field_28083_n.generateNoiseOctaves(this.field_28079_r, (double)(i1 * 16), (double)(i2 * 16), 0.0D, 16, 16, 1, d5, d5, 1.0D);
+-		this.field_28078_s = this.field_28083_n.generateNoiseOctaves(this.field_28078_s, (double)(i1 * 16), 109.0134D, (double)(i2 * 16), 16, 1, 16, d5, 1.0D, d5);
+-		this.field_28077_t = this.field_28082_o.generateNoiseOctaves(this.field_28077_t, (double)(i1 * 16), (double)(i2 * 16), 0.0D, 16, 16, 1, d5 * 2.0D, d5 * 2.0D, d5 * 2.0D);
++		this.field_28079_r = this.field_28083_n.generateNoiseOctaves2(this.field_28079_r, (double)(i1 * 16), (double)(i2 * 16), 0.0D, 16, 16, 1, d5, d5, 1.0D);
++		this.field_28078_s = this.field_28083_n.generateNoiseOctaves2(this.field_28078_s, (double)(i1 * 16), 109.0134D, (double)(i2 * 16), 16, 1, 16, d5, 1.0D, d5);
++		this.field_28077_t = this.field_28082_o.generateNoiseOctaves2(this.field_28077_t, (double)(i1 * 16), (double)(i2 * 16), 0.0D, 16, 16, 1, d5 * 2.0D, d5 * 2.0D, d5 * 2.0D);
+ 
+ 		for(int i7 = 0; i7 < 16; ++i7) {
+ 			for(int i8 = 0; i8 < 16; ++i8) {
+@@ -176,9 +176,9 @@
+ 		this.field_28090_g = this.field_28096_a.func_4109_a(this.field_28090_g, i2, i4, i5, i7, 1.121D, 1.121D, 0.5D);
+ 		this.field_28089_h = this.field_28095_b.func_4109_a(this.field_28089_h, i2, i4, i5, i7, 200.0D, 200.0D, 0.5D);
+ 		d8 *= 2.0D;
+-		this.field_28093_d = this.field_28084_m.generateNoiseOctaves(this.field_28093_d, (double)i2, (double)i3, (double)i4, i5, i6, i7, d8 / 80.0D, d10 / 160.0D, d8 / 80.0D);
+-		this.field_28092_e = this.field_28086_k.generateNoiseOctaves(this.field_28092_e, (double)i2, (double)i3, (double)i4, i5, i6, i7, d8, d10, d8);
+-		this.field_28091_f = this.field_28085_l.generateNoiseOctaves(this.field_28091_f, (double)i2, (double)i3, (double)i4, i5, i6, i7, d8, d10, d8);
++		this.field_28093_d = this.field_28084_m.generateNoiseOctaves2(this.field_28093_d, (double)i2, (double)i3, (double)i4, i5, i6, i7, d8 / 80.0D, d10 / 160.0D, d8 / 80.0D);
++		this.field_28092_e = this.field_28086_k.generateNoiseOctaves2(this.field_28092_e, (double)i2, (double)i3, (double)i4, i5, i6, i7, d8, d10, d8);
++		this.field_28091_f = this.field_28085_l.generateNoiseOctaves2(this.field_28091_f, (double)i2, (double)i3, (double)i4, i5, i6, i7, d8, d10, d8);
+ 		int i14 = 0;
+ 		int i15 = 0;
+ 		int i16 = 16 / i5;
+@@ -367,7 +367,7 @@
+ 		}
+ 
+ 		d11 = 0.5D;
+-		i13 = (int)((this.field_28094_c.func_806_a((double)i4 * d11, (double)i5 * d11) / 8.0D + this.field_28087_j.nextDouble() * 4.0D + 4.0D) / 3.0D);
++		i13 = (int)((this.field_28094_c.NoiseGenerator((double)i4 * d11, (double)i5 * d11) / 8.0D + this.field_28087_j.nextDouble() * 4.0D + 4.0D) / 3.0D);
+ 		i14 = 0;
+ 		if(this.field_28087_j.nextInt(10) == 0) {
+ 			++i14;

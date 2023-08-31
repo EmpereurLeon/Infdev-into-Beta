@@ -1,0 +1,38 @@
+--- a/net/minecraft/src/Chunk.java
++++ b/net/minecraft/src/Chunk.java
+@@ -17,6 +17,7 @@
+ 	public NibbleArray blocklightMap;
+ 	public byte[] heightMap;
+ 	public int field_686_i;
++	public int lowestBlockHeight;
+ 	public final int xPosition;
+ 	public final int zPosition;
+ 	public Map chunkTileEntityMap;
+@@ -43,6 +44,27 @@
+ 			this.entities[i4] = new ArrayList();
+ 		}
+ 
++	}
++
++	public void generateHeightMap() {
++		int i1 = 127;
++
++		for(int i2 = 0; i2 < 16; ++i2) {
++			for(int i3 = 0; i3 < 16; ++i3) {
++				int i4 = 127;
++
++				for(int i5 = i2 << 11 | i3 << 7; i4 > 0 && Block.lightOpacity[this.blocks[i5 + i4 - 1] & 255] == 0; --i4) {
++				}
++
++				this.heightMap[i3 << 4 | i2] = (byte)i4;
++				if(i4 < i1) {
++					i1 = i4;
++				}
++			}
++		}
++
++		this.lowestBlockHeight = i1;
++		this.isModified = true;
+ 	}
+ 
+ 	public Chunk(World world1, byte[] b2, int i3, int i4) {

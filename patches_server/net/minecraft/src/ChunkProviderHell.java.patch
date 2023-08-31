@@ -1,0 +1,32 @@
+--- a/net/minecraft/src/ChunkProviderHell.java
++++ b/net/minecraft/src/ChunkProviderHell.java
+@@ -103,9 +103,9 @@
+ 	public void func_4061_b(int i1, int i2, byte[] b3) {
+ 		byte b4 = 64;
+ 		double d5 = 8.0D / 256D;
+-		this.field_4233_p = this.field_4237_l.generateNoiseOctaves(this.field_4233_p, (double)(i1 * 16), (double)(i2 * 16), 0.0D, 16, 16, 1, d5, d5, 1.0D);
+-		this.field_4232_q = this.field_4237_l.generateNoiseOctaves(this.field_4232_q, (double)(i1 * 16), 109.0134D, (double)(i2 * 16), 16, 1, 16, d5, 1.0D, d5);
+-		this.field_4231_r = this.field_4236_m.generateNoiseOctaves(this.field_4231_r, (double)(i1 * 16), (double)(i2 * 16), 0.0D, 16, 16, 1, d5 * 2.0D, d5 * 2.0D, d5 * 2.0D);
++		this.field_4233_p = this.field_4237_l.generateNoiseOctaves2(this.field_4233_p, (double)(i1 * 16), (double)(i2 * 16), 0.0D, 16, 16, 1, d5, d5, 1.0D);
++		this.field_4232_q = this.field_4237_l.generateNoiseOctaves2(this.field_4232_q, (double)(i1 * 16), 109.0134D, (double)(i2 * 16), 16, 1, 16, d5, 1.0D, d5);
++		this.field_4231_r = this.field_4236_m.generateNoiseOctaves2(this.field_4231_r, (double)(i1 * 16), (double)(i2 * 16), 0.0D, 16, 16, 1, d5 * 2.0D, d5 * 2.0D, d5 * 2.0D);
+ 
+ 		for(int i7 = 0; i7 < 16; ++i7) {
+ 			for(int i8 = 0; i8 < 16; ++i8) {
+@@ -194,11 +194,11 @@
+ 
+ 		double d8 = 684.412D;
+ 		double d10 = 2053.236D;
+-		this.field_4243_f = this.field_4248_a.generateNoiseOctaves(this.field_4243_f, (double)i2, (double)i3, (double)i4, i5, 1, i7, 1.0D, 0.0D, 1.0D);
+-		this.field_4242_g = this.field_4247_b.generateNoiseOctaves(this.field_4242_g, (double)i2, (double)i3, (double)i4, i5, 1, i7, 100.0D, 0.0D, 100.0D);
+-		this.field_4246_c = this.field_4238_k.generateNoiseOctaves(this.field_4246_c, (double)i2, (double)i3, (double)i4, i5, i6, i7, d8 / 80.0D, d10 / 60.0D, d8 / 80.0D);
+-		this.field_4245_d = this.field_4240_i.generateNoiseOctaves(this.field_4245_d, (double)i2, (double)i3, (double)i4, i5, i6, i7, d8, d10, d8);
+-		this.field_4244_e = this.field_4239_j.generateNoiseOctaves(this.field_4244_e, (double)i2, (double)i3, (double)i4, i5, i6, i7, d8, d10, d8);
++		this.field_4243_f = this.field_4248_a.generateNoiseOctaves2(this.field_4243_f, (double)i2, (double)i3, (double)i4, i5, 1, i7, 1.0D, 0.0D, 1.0D);
++		this.field_4242_g = this.field_4247_b.generateNoiseOctaves2(this.field_4242_g, (double)i2, (double)i3, (double)i4, i5, 1, i7, 100.0D, 0.0D, 100.0D);
++		this.field_4246_c = this.field_4238_k.generateNoiseOctaves2(this.field_4246_c, (double)i2, (double)i3, (double)i4, i5, i6, i7, d8 / 80.0D, d10 / 60.0D, d8 / 80.0D);
++		this.field_4245_d = this.field_4240_i.generateNoiseOctaves2(this.field_4245_d, (double)i2, (double)i3, (double)i4, i5, i6, i7, d8, d10, d8);
++		this.field_4244_e = this.field_4239_j.generateNoiseOctaves2(this.field_4244_e, (double)i2, (double)i3, (double)i4, i5, i6, i7, d8, d10, d8);
+ 		int i12 = 0;
+ 		int i13 = 0;
+ 		double[] d14 = new double[i6];

@@ -1,0 +1,308 @@
+--- a/net/minecraft/src/ChunkProviderGenerate.java
++++ b/net/minecraft/src/ChunkProviderGenerate.java
+@@ -1,24 +1,37 @@
+ package net.minecraft.src;
+ 
+ import java.util.Random;
++import java.io.IOException;
++import java.util.ArrayList;
++import java.util.HashMap;
++import java.util.HashSet;
++import java.util.List;
++import java.util.Map;
++import java.util.Set;
+ 
+ public class ChunkProviderGenerate implements IChunkProvider {
+ 	private Random rand;
+-	private NoiseGeneratorOctaves field_912_k;
+-	private NoiseGeneratorOctaves field_911_l;
+-	private NoiseGeneratorOctaves field_910_m;
+-	private NoiseGeneratorOctaves field_909_n;
+-	private NoiseGeneratorOctaves field_908_o;
+-	public NoiseGeneratorOctaves field_922_a;
+-	public NoiseGeneratorOctaves field_921_b;
+-	public NoiseGeneratorOctaves mobSpawnerNoise;
++	private NoiseGeneratorOctaves noiseGen1;
++	private NoiseGeneratorOctaves noiseGen2;
++	private NoiseGeneratorOctaves noiseGen3;
++	private NoiseGeneratorOctaves noiseGen4;
++	private NoiseGeneratorOctaves noiseGen5;
++	private NoiseGeneratorOctaves noiseGen6;
++	private NoiseGeneratorOctaves noiseGen7;
++	private NoiseGeneratorOctaves mobSpawnerNoise;
+ 	private World worldObj;
+ 	private double[] field_4180_q;
+ 	private double[] sandNoise = new double[256];
+ 	private double[] gravelNoise = new double[256];
+ 	private double[] stoneNoise = new double[256];
+-	private MapGenBase field_902_u = new MapGenCaves();
++	private final MapGenBase field_902_u = new MapGenCaves();
+ 	private BiomeGenBase[] biomesForGeneration;
++	private final Set droppedChunksSet = new HashSet();
++	private IChunkProvider chunkProvider;
++	private IChunkLoader chunkLoader;
++	private Map chunkMap = new HashMap();
++	private List chunkList = new ArrayList();
++	private World field_28066_g;
+ 	double[] field_4185_d;
+ 	double[] field_4184_e;
+ 	double[] field_4183_f;
+@@ -30,13 +43,13 @@
+ 	public ChunkProviderGenerate(World world1, long j2) {
+ 		this.worldObj = world1;
+ 		this.rand = new Random(j2);
+-		this.field_912_k = new NoiseGeneratorOctaves(this.rand, 16);
+-		this.field_911_l = new NoiseGeneratorOctaves(this.rand, 16);
+-		this.field_910_m = new NoiseGeneratorOctaves(this.rand, 8);
+-		this.field_909_n = new NoiseGeneratorOctaves(this.rand, 4);
+-		this.field_908_o = new NoiseGeneratorOctaves(this.rand, 4);
+-		this.field_922_a = new NoiseGeneratorOctaves(this.rand, 10);
+-		this.field_921_b = new NoiseGeneratorOctaves(this.rand, 16);
++		this.noiseGen1 = new NoiseGeneratorOctaves(this.rand, 16);
++		this.noiseGen2 = new NoiseGeneratorOctaves(this.rand, 16);
++		this.noiseGen3 = new NoiseGeneratorOctaves(this.rand, 8);
++		this.noiseGen4 = new NoiseGeneratorOctaves(this.rand, 4);
++		this.noiseGen5 = new NoiseGeneratorOctaves(this.rand, 4);
++		this.noiseGen6 = new NoiseGeneratorOctaves(this.rand, 10);
++		this.noiseGen7 = new NoiseGeneratorOctaves(this.rand, 16);
+ 		this.mobSpawnerNoise = new NoiseGeneratorOctaves(this.rand, 8);
+ 	}
+ 
+@@ -113,9 +126,9 @@
+ 	public void replaceBlocksForBiome(int i1, int i2, byte[] b3, BiomeGenBase[] biomeGenBase4) {
+ 		byte b5 = 64;
+ 		double d6 = 8.0D / 256D;
+-		this.sandNoise = this.field_909_n.generateNoiseOctaves(this.sandNoise, (double)(i1 * 16), (double)(i2 * 16), 0.0D, 16, 16, 1, d6, d6, 1.0D);
+-		this.gravelNoise = this.field_909_n.generateNoiseOctaves(this.gravelNoise, (double)(i1 * 16), 109.0134D, (double)(i2 * 16), 16, 1, 16, d6, 1.0D, d6);
+-		this.stoneNoise = this.field_908_o.generateNoiseOctaves(this.stoneNoise, (double)(i1 * 16), (double)(i2 * 16), 0.0D, 16, 16, 1, d6 * 2.0D, d6 * 2.0D, d6 * 2.0D);
++		this.sandNoise = this.noiseGen4.generateNoiseOctaves2(this.sandNoise, (double)(i1 * 16), (double)(i2 * 16), 0.0D, 16, 16, 1, d6, d6, 1.0D);
++		this.gravelNoise = this.noiseGen4.generateNoiseOctaves2(this.gravelNoise, (double)(i1 * 16), 109.0134D, (double)(i2 * 16), 16, 1, 16, d6, 1.0D, d6);
++		this.stoneNoise = this.noiseGen5.generateNoiseOctaves2(this.stoneNoise, (double)(i1 * 16), (double)(i2 * 16), 0.0D, 16, 16, 1, d6 * 2.0D, d6 * 2.0D, d6 * 2.0D);
+ 
+ 		for(int i8 = 0; i8 < 16; ++i8) {
+ 			for(int i9 = 0; i9 < 16; ++i9) {
+@@ -198,11 +211,140 @@
+ 		double[] d5 = this.worldObj.getWorldChunkManager().temperature;
+ 		this.generateTerrain(i1, i2, b3, this.biomesForGeneration, d5);
+ 		this.replaceBlocksForBiome(i1, i2, b3, this.biomesForGeneration);
+-		this.field_902_u.func_867_a(this, this.worldObj, i1, i2, b3);
+-		chunk4.func_1024_c();
++		chunk4.func_1024_c();
++
++
++		int i5;
++		int i6;
++		double d50;
++		for(i5 = 0; i5 < 4; ++i5) {
++			for(i6 = 0; i6 < 4; ++i6) {
++				double[][] d7 = new double[33][4];
++				int i8 = (i1 << 2) + i5;
++				int i9 = (i2 << 2) + i6;
++
++				for(int i10 = 0; i10 < d7.length; ++i10) {
++					d7[i10][0] = this.initializeNoiseField((double)i8, (double)i10, (double)i9);
++					d7[i10][1] = this.initializeNoiseField((double)i8, (double)i10, (double)(i9 + 1));
++					d7[i10][2] = this.initializeNoiseField((double)(i8 + 1), (double)i10, (double)i9);
++					d7[i10][3] = this.initializeNoiseField((double)(i8 + 1), (double)i10, (double)(i9 + 1));
++				}
++
++				for(i8 = 0; i8 < 32; ++i8) {
++					d50 = d7[i8][0];
++					double d11 = d7[i8][1];
++					double d13 = d7[i8][2];
++					double d15 = d7[i8][3];
++					double d17 = d7[i8 + 1][0];
++					double d19 = d7[i8 + 1][1];
++					double d21 = d7[i8 + 1][2];
++					double d23 = d7[i8 + 1][3];
++
++					for(int i25 = 0; i25 < 4; ++i25) {
++						double d26 = (double)i25 / 4.0D;
++						double d28 = d50 + (d17 - d50) * d26;
++						double d30 = d11 + (d19 - d11) * d26;
++						double d32 = d13 + (d21 - d13) * d26;
++						double d34 = d15 + (d23 - d15) * d26;
++
++						for(int i55 = 0; i55 < 4; ++i55) {
++							double d37 = (double)i55 / 4.0D;
++							double d39 = d28 + (d32 - d28) * d37;
++							double d41 = d30 + (d34 - d30) * d37;
++							int i27 = i55 + (i5 << 2) << 11 | 0 + (i6 << 2) << 7 | (i8 << 2) + i25;
++
++							for(int i36 = 0; i36 < 4; ++i36) {
++								double d45 = (double)i36 / 4.0D;
++								double d47 = d39 + (d41 - d39) * d45;
++								int i56 = 0;
++								if((i8 << 2) + i25 < 64) {
++									i56 = Block.waterStill.blockID;
++								}
++
++								if(d47 > 0.0D) {
++									i56 = Block.stone.blockID;
++								}
++
++								b3[i27] = (byte)i56;
++								i27 += 128;
++							}
++						}
++					}
++				}
++			}
++		}
++
++		for(i5 = 0; i5 < 16; ++i5) {
++			for(i6 = 0; i6 < 16; ++i6) {
++				double d49 = (double)((i1 << 4) + i5);
++				d50 = (double)((i2 << 4) + i6);
++				boolean z51 = this.noiseGen4.generateNoiseOctaves(d49 * 8.0D / 256D, d50 * 8.0D / 256D, 0.0D) + this.rand.nextDouble() * 0.2D > 0.0D;
++				boolean z14 = this.noiseGen4.generateNoiseOctaves(d50 * 8.0D / 256D, 109.0134D, d49 * 8.0D / 256D) + this.rand.nextDouble() * 0.2D > 3.0D;
++				int i52 = (int)(this.noiseGen5.NoiseGenerator(d49 * 8.0D / 256D * 2.0D, d50 * 8.0D / 256D * 2.0D) / 3.0D + 3.0D + this.rand.nextDouble() * 0.25D);
++				int i16 = i5 << 11 | i6 << 7 | 127;
++				int i53 = -1;
++				int i18 = Block.grass.blockID;
++				int i54 = Block.dirt.blockID;
++
++				for(int i20 = 127; i20 >= 0; --i20) {
++					if(b3[i16] == 0) {
++						i53 = -1;
++					} else if(b3[i16] == Block.stone.blockID) {
++						if(i53 == -1) {
++							if(i52 <= 0) {
++								i18 = 0;
++								i54 = (byte)Block.stone.blockID;
++							} else if(i20 >= 60 && i20 <= 65) {
++								i18 = Block.grass.blockID;
++								i54 = Block.dirt.blockID;
++								if(z14) {
++									i18 = 0;
++								}
++
++								if(z14) {
++									i54 = Block.gravel.blockID;
++								}
++
++								if(z51) {
++									i18 = Block.sand.blockID;
++								}
++
++								if(z51) {
++									i54 = Block.sand.blockID;
++								}
++							}
++
++							if(i20 < 64 && i18 == 0) {
++								i18 = Block.waterStill.blockID;
++							}
++
++							i53 = i52;
++							if(i20 >= 63) {
++								b3[i16] = (byte)i18;
++							} else {
++								b3[i16] = (byte)i54;
++							}
++						} else if(i53 > 0) {
++							--i53;
++							b3[i16] = (byte)i54;
++						}
++					}
++
++					--i16;
++				}
++			}
++		}
++
++		generateCaves(i1, i2, b3);
++		chunk4.func_1024_c();
++		chunk4.generateHeightMap();
+ 		return chunk4;
+ 	}
+ 
++	private void generateCaves(int i1, int i2, byte[] b3) {
++		this.field_902_u.func_867_a(this, this.worldObj, i1, i2, b3);
++	}
++
+ 	private double[] func_4061_a(double[] d1, int i2, int i3, int i4, int i5, int i6, int i7) {
+ 		if(d1 == null) {
+ 			d1 = new double[i5 * i6 * i7];
+@@ -212,11 +354,11 @@
+ 		double d10 = 684.412D;
+ 		double[] d12 = this.worldObj.getWorldChunkManager().temperature;
+ 		double[] d13 = this.worldObj.getWorldChunkManager().humidity;
+-		this.field_4182_g = this.field_922_a.func_4109_a(this.field_4182_g, i2, i4, i5, i7, 1.121D, 1.121D, 0.5D);
+-		this.field_4181_h = this.field_921_b.func_4109_a(this.field_4181_h, i2, i4, i5, i7, 200.0D, 200.0D, 0.5D);
+-		this.field_4185_d = this.field_910_m.generateNoiseOctaves(this.field_4185_d, (double)i2, (double)i3, (double)i4, i5, i6, i7, d8 / 80.0D, d10 / 160.0D, d8 / 80.0D);
+-		this.field_4184_e = this.field_912_k.generateNoiseOctaves(this.field_4184_e, (double)i2, (double)i3, (double)i4, i5, i6, i7, d8, d10, d8);
+-		this.field_4183_f = this.field_911_l.generateNoiseOctaves(this.field_4183_f, (double)i2, (double)i3, (double)i4, i5, i6, i7, d8, d10, d8);
++		this.field_4182_g = this.noiseGen6.func_4109_a(this.field_4182_g, i2, i4, i5, i7, 1.121D, 1.121D, 0.5D);
++		this.field_4181_h = this.noiseGen7.func_4109_a(this.field_4181_h, i2, i4, i5, i7, 200.0D, 200.0D, 0.5D);
++		this.field_4185_d = this.noiseGen3.generateNoiseOctaves2(this.field_4185_d, (double)i2, (double)i3, (double)i4, i5, i6, i7, d8 / 80.0D, d10 / 160.0D, d8 / 80.0D);
++		this.field_4184_e = this.noiseGen1.generateNoiseOctaves2(this.field_4184_e, (double)i2, (double)i3, (double)i4, i5, i6, i7, d8, d10, d8);
++		this.field_4183_f = this.noiseGen2.generateNoiseOctaves2(this.field_4183_f, (double)i2, (double)i3, (double)i4, i5, i6, i7, d8, d10, d8);
+ 		int i14 = 0;
+ 		int i15 = 0;
+ 		int i16 = 16 / i5;
+@@ -408,7 +550,7 @@
+ 		}
+ 
+ 		d11 = 0.5D;
+-		i13 = (int)((this.mobSpawnerNoise.func_806_a((double)i4 * d11, (double)i5 * d11) / 8.0D + this.rand.nextDouble() * 4.0D + 4.0D) / 3.0D);
++		i13 = (int)((this.mobSpawnerNoise.NoiseGenerator((double)i4 * d11, (double)i5 * d11) / 8.0D + this.rand.nextDouble() * 4.0D + 4.0D) / 3.0D);
+ 		i14 = 0;
+ 		if(this.rand.nextInt(10) == 0) {
+ 			++i14;
+@@ -616,5 +758,55 @@
+ 
+ 	public String makeString() {
+ 		return "RandomLevelSource";
++	}
++
++	private double initializeNoiseField(double d1, double d3, double d5) {
++		double d7;
++		if((d7 = d3 * 4.0D - 64.0D) < 0.0D) {
++			d7 *= 3.0D;
++		}
++
++		double d9;
++		double d13;
++		if((d9 = this.noiseGen3.generateNoiseOctaves(d1 * 684.412D / 80.0D, d3 * 684.412D / 400.0D, d5 * 684.412D / 80.0D) / 2.0D) < -1.0D) {
++			if((d13 = this.noiseGen1.generateNoiseOctaves(d1 * 684.412D, d3 * 984.412D, d5 * 684.412D) / 512.0D - d7) < -10.0D) {
++				d13 = -10.0D;
++			}
++
++			if(d13 > 10.0D) {
++				d13 = 10.0D;
++			}
++		} else if(d9 > 1.0D) {
++			if((d13 = this.noiseGen2.generateNoiseOctaves(d1 * 684.412D, d3 * 984.412D, d5 * 684.412D) / 512.0D - d7) < -10.0D) {
++				d13 = -10.0D;
++			}
++
++			if(d13 > 10.0D) {
++				d13 = 10.0D;
++			}
++		} else {
++			double d15 = this.noiseGen1.generateNoiseOctaves(d1 * 684.412D, d3 * 984.412D, d5 * 684.412D) / 512.0D - d7;
++			double d17 = this.noiseGen2.generateNoiseOctaves(d1 * 684.412D, d3 * 984.412D, d5 * 684.412D) / 512.0D - d7;
++			if(d15 < -10.0D) {
++				d15 = -10.0D;
++			}
++
++			if(d15 > 10.0D) {
++				d15 = 10.0D;
++			}
++
++			if(d17 < -10.0D) {
++				d17 = -10.0D;
++			}
++
++			if(d17 > 10.0D) {
++				d17 = 10.0D;
++			}
++
++			double d19 = (d9 + 1.0D) / 2.0D;
++			d13 = d15 + (d17 - d15) * d19;
++		}
++
++		return d13;
+ 	}
+ }

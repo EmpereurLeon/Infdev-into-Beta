@@ -1,0 +1,74 @@
+--- a/net/minecraft/src/BlockPistonBase.java
++++ b/net/minecraft/src/BlockPistonBase.java
+@@ -274,9 +274,13 @@
+ 		int i8 = i4 + PistonBlockTextures.field_31058_d[i5];
+ 		int i9 = 0;
+ 
+-		int i10;
+-		while(i9 < 13) {
+-			if(i7 > 0 && i7 < 127) {
++		while(true) {
++			int i10;
++			if(i9 < 13) {
++				if(i7 <= 0 || i7 >= 127) {
++					return false;
++				}
++
+ 				i10 = world1.getBlockId(i6, i7, i8);
+ 				if(i10 != 0) {
+ 					if(!canPushBlock(i10, world1, i6, i7, i8, true)) {
+@@ -298,31 +302,28 @@
+ 					Block.blocksList[i10].dropBlockAsItem(world1, i6, i7, i8, world1.getBlockMetadata(i6, i7, i8));
+ 					world1.setBlockWithNotify(i6, i7, i8, 0);
+ 				}
+-				break;
+-			}
+-
+-			return false;
+-		}
+-
+-		while(i6 != i2 || i7 != i3 || i8 != i4) {
+-			i9 = i6 - PistonBlockTextures.field_31056_b[i5];
+-			i10 = i7 - PistonBlockTextures.field_31059_c[i5];
+-			int i11 = i8 - PistonBlockTextures.field_31058_d[i5];
+-			int i12 = world1.getBlockId(i9, i10, i11);
+-			int i13 = world1.getBlockMetadata(i9, i10, i11);
+-			if(i12 == this.blockID && i9 == i2 && i10 == i3 && i11 == i4) {
+-				world1.setBlockAndMetadata(i6, i7, i8, Block.pistonMoving.blockID, i5 | (this.isSticky ? 8 : 0));
+-				world1.setBlockTileEntity(i6, i7, i8, BlockPistonMoving.func_31036_a(Block.pistonExtension.blockID, i5 | (this.isSticky ? 8 : 0), i5, true, false));
+-			} else {
+-				world1.setBlockAndMetadata(i6, i7, i8, Block.pistonMoving.blockID, i13);
+-				world1.setBlockTileEntity(i6, i7, i8, BlockPistonMoving.func_31036_a(i12, i13, i5, true, false));
+-			}
+-
+-			i6 = i9;
+-			i7 = i10;
+-			i8 = i11;
+-		}
+-
+-		return true;
++			}
++
++			while(i6 != i2 || i7 != i3 || i8 != i4) {
++				i9 = i6 - PistonBlockTextures.field_31056_b[i5];
++				i10 = i7 - PistonBlockTextures.field_31059_c[i5];
++				int i11 = i8 - PistonBlockTextures.field_31058_d[i5];
++				int i12 = world1.getBlockId(i9, i10, i11);
++				int i13 = world1.getBlockMetadata(i9, i10, i11);
++				if(i12 == this.blockID && i9 == i2 && i10 == i3 && i11 == i4) {
++					world1.setBlockAndMetadata(i6, i7, i8, Block.pistonMoving.blockID, i5 | (this.isSticky ? 8 : 0));
++					world1.setBlockTileEntity(i6, i7, i8, BlockPistonMoving.func_31036_a(Block.pistonExtension.blockID, i5 | (this.isSticky ? 8 : 0), i5, true, false));
++				} else {
++					world1.setBlockAndMetadata(i6, i7, i8, Block.pistonMoving.blockID, i13);
++					world1.setBlockTileEntity(i6, i7, i8, BlockPistonMoving.func_31036_a(i12, i13, i5, true, false));
++				}
++
++				i6 = i9;
++				i7 = i10;
++				i8 = i11;
++			}
++
++			return true;
++		}
+ 	}
+ }

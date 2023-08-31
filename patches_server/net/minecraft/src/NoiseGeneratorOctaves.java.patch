@@ -1,0 +1,75 @@
+--- a/net/minecraft/src/NoiseGeneratorOctaves.java
++++ b/net/minecraft/src/NoiseGeneratorOctaves.java
+@@ -2,12 +2,12 @@
+ 
+ import java.util.Random;
+ 
+-public class NoiseGeneratorOctaves extends NoiseGenerator {
++public final class NoiseGeneratorOctaves extends NoiseGenerator {
+ 	private NoiseGeneratorPerlin[] generatorCollection;
+-	private int field_938_b;
++	private int octaves;
+ 
+ 	public NoiseGeneratorOctaves(Random random1, int i2) {
+-		this.field_938_b = i2;
++		this.octaves = i2;
+ 		this.generatorCollection = new NoiseGeneratorPerlin[i2];
+ 
+ 		for(int i3 = 0; i3 < i2; ++i3) {
+@@ -16,19 +16,31 @@
+ 
+ 	}
+ 
+-	public double func_647_a(double d1, double d3) {
++	public final double NoiseGenerator(double d1, double d3) {
+ 		double d5 = 0.0D;
+ 		double d7 = 1.0D;
+ 
+-		for(int i9 = 0; i9 < this.field_938_b; ++i9) {
+-			d5 += this.generatorCollection[i9].func_642_a(d1 * d7, d3 * d7) / d7;
+-			d7 /= 2.0D;
++		for(int i9 = 0; i9 < this.octaves; ++i9) {
++			d5 += this.generatorCollection[i9].generateNoise(d1 / d7, d3 / d7) * d7;
++			d7 *= 2.0D;
+ 		}
+ 
+ 		return d5;
+ 	}
+ 
+-	public double[] generateNoiseOctaves(double[] d1, double d2, double d4, double d6, int i8, int i9, int i10, double d11, double d13, double d15) {
++	public final double generateNoiseOctaves(double d1, double d3, double d5) {
++		double d7 = 0.0D;
++		double d9 = 1.0D;
++
++		for(int i11 = 0; i11 < this.octaves; ++i11) {
++			d7 += this.generatorCollection[i11].generateNoiseD(d1 / d9, d3 / d9, d5 / d9) * d9;
++			d9 *= 2.0D;
++		}
++
++		return d7;
++	}
++
++	public double[] generateNoiseOctaves2(double[] d1, double d2, double d4, double d6, int i8, int i9, int i10, double d11, double d13, double d15) {
+ 		if(d1 == null) {
+ 			d1 = new double[i8 * i9 * i10];
+ 		} else {
+@@ -36,18 +48,10 @@
+ 				d1[i17] = 0.0D;
+ 			}
+ 		}
+-
+-		double d20 = 1.0D;
+-
+-		for(int i19 = 0; i19 < this.field_938_b; ++i19) {
+-			this.generatorCollection[i19].func_646_a(d1, d2, d4, d6, i8, i9, i10, d11 * d20, d13 * d20, d15 * d20, d20);
+-			d20 /= 2.0D;
+-		}
+-
+ 		return d1;
+ 	}
+ 
+ 	public double[] func_4103_a(double[] d1, int i2, int i3, int i4, int i5, double d6, double d8, double d10) {
+-		return this.generateNoiseOctaves(d1, (double)i2, 10.0D, (double)i3, i4, 1, i5, d6, 1.0D, d8);
++		return this.generateNoiseOctaves2(d1, (double)i2, 10.0D, (double)i3, i4, 1, i5, d6, 1.0D, d8);
+ 	}
+ }

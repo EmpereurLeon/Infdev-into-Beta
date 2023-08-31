@@ -1,0 +1,38 @@
+--- a/net/minecraft/src/World.java
++++ b/net/minecraft/src/World.java
+@@ -324,6 +324,10 @@
+ 		return this.checkChunksExist(i1 - i4, i2 - i4, i3 - i4, i1 + i4, i2 + i4, i3 + i4);
+ 	}
+ 
++	public final boolean setTileNoUpdate(int i1, int i2, int i3, int i4) {
++		return i1 >= -32000000 && i3 >= -32000000 && i1 < 32000000 && i3 <= 32000000 ? (i2 < 0 ? false : (i2 >= 128 ? false : this.getChunkFromChunkCoords(i1 >> 4, i3 >> 4).setBlockID(i1 & 15, i2, i3 & 15, i4))) : false;
++	}
++
+ 	public boolean checkChunksExist(int i1, int i2, int i3, int i4, int i5, int i6) {
+ 		if(i5 >= 0 && i2 < 128) {
+ 			i1 >>= 4;
+@@ -1648,10 +1652,10 @@
+ 		} else {
+ 			++this.lightingUpdatesCounter;
+ 
++			boolean z2;
+ 			try {
+ 				int i1 = 500;
+ 
+-				boolean z2;
+ 				while(this.lightingToUpdate.size() > 0) {
+ 					--i1;
+ 					if(i1 <= 0) {
+@@ -1663,10 +1667,11 @@
+ 				}
+ 
+ 				z2 = false;
+-				return z2;
+ 			} finally {
+ 				--this.lightingUpdatesCounter;
+ 			}
++
++			return z2;
+ 		}
+ 	}
+ 

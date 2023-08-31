@@ -1,0 +1,11 @@
+--- a/net/minecraft/src/World.java
++++ b/net/minecraft/src/World.java
+@@ -2116,4 +2116,8 @@
+ 		}
+ 
+ 	}
++
++	public final boolean setTileNoUpdate(int i1, int i2, int i3, int i4) {
++		return i1 >= -32000000 && i3 >= -32000000 && i1 < 32000000 && i3 <= 32000000 ? (i2 < 0 ? false : (i2 >= 128 ? false : this.getChunkFromChunkCoords(i1 >> 4, i3 >> 4).setBlockID(i1 & 15, i2, i3 & 15, i4))) : false;
++	}
+ }
